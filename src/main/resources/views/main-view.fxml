@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+   <children>
+      <TabPane layoutX="334.0" layoutY="47.0" prefHeight="546.0" prefWidth="666.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab closable="false" text="Quest Journal">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="518.0" prefWidth="525.0" />
+            </content>
+          </Tab>
+          <Tab closable="false" text="Find a Quest">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="881.0">
+                     <children>
+                        <TableView layoutX="14.0" layoutY="43.0" prefHeight="443.0" prefWidth="474.0">
+                          <columns>
+                            <TableColumn prefWidth="135.19997882843018" text="Quest Giver" />
+                            <TableColumn prefWidth="108.00004577636719" text="Giver Rank" />
+                              <TableColumn prefWidth="120.0" text="Date of Posting" />
+                              <TableColumn prefWidth="109.60001220703123" text="Reward" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="My Quests">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Post a Quest">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Label layoutX="359.0" layoutY="22.0" text="Your rank:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imageView" fitHeight="600.0" fitWidth="337.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/game.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="78.0" layoutY="40.0" text="Questie" textFill="#a0a0a1">
+         <font>
+            <Font name="Lucida Handwriting Italic" size="36.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
