@@ -14,4 +14,6 @@ public class Constants {
     public static final int WORD_SIZE = 5;
 
     public static final String ALPHA_NUMERIC_STRINGS = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
+
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 }

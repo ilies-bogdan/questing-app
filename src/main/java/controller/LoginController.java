@@ -4,22 +4,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import service.Service;
+import service.QuestingService;
 
 import java.io.IOException;
 
 public class LoginController {
-    private Service service;
+    private QuestingService service;
+    @FXML
+    private Label labelSignUp;
     @FXML
     private TextField textFieldUsername;
     @FXML
     private PasswordField passwordField;
 
-    public void setService(Service service) {
+    public void setService(QuestingService service) {
         this.service = service;
     }
 
@@ -47,16 +50,16 @@ public class LoginController {
         String password = passwordField.getText();
 
         if (service.checkPassword(username, password)) {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/main-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/questing-view.fxml"));
             Stage stage = new Stage();
-            Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
+            Scene scene = new Scene(fxmlLoader.load(), 1200, 600);
 //            scene.getStylesheets()
 //                    .add(getClass().getClassLoader().getResource("styles/login-style.css").toExternalForm());
             stage.setResizable(false);
             stage.setTitle("Questie");
             stage.setScene(scene);
 
-            MainController mainCtr = fxmlLoader.getController();
+            QuestingController mainCtr = fxmlLoader.getController();
             mainCtr.setService(service);
             mainCtr.setUser(service.findUserByUsername(username));
             Stage loginStage  = (Stage) textFieldUsername.getScene().getWindow();

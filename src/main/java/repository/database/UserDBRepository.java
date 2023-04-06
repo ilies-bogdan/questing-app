@@ -58,29 +58,55 @@ public class UserDBRepository implements UserRepository {
     }
 
     @Override
-    public void update(User user, Integer integer) {
-
+    public void update(User user, Integer id) throws RepositoryException {
+        Connection conn = dbUtils.getConnection();
+        try(PreparedStatement preStmt = conn.prepareStatement("UPDATE Users SET username=?, email=?, password_code=?, salt=?, rank=?, token_count=? WHERE id=?")) {
+            preStmt.setString(1, user.getUsername());
+            preStmt.setString(2, user.getEmail());
+            preStmt.setInt(3, user.getPasswordCode());
+            preStmt.setString(4, user.getSalt());
+            preStmt.setString(5, user.getRank().toString());
+            preStmt.setInt(6, user.getTokenCount());
+            preStmt.setInt(7, id);
+            int result = preStmt.executeUpdate();
+            if (result == 0) {
+                throw new RepositoryException("Update client failed!");
+            }
+        } catch (SQLException e) {
+            PopupMessage.showErrorMessage("DB error " + e);
+        }
     }
 
     @Override
-    public User findById(Integer integer) {
+    public User findById(Integer id) {
+        Connection conn = dbUtils.getConnection();
+        try(PreparedStatement preStmt = conn.prepareStatement("SELECT * FROM Users WHERE id=?")) {
+            preStmt.setInt(1, id);
+            try(ResultSet result = preStmt.executeQuery()) {
+                if (result.next()) {
+                    return extractUser(result);
+                }
+            }
+        } catch (SQLException e) {
+            PopupMessage.showErrorMessage("DB error " + e);
+        }
         return null;
     }
 
     @Override
     public Iterable<User> getAll() {
         Connection conn = dbUtils.getConnection();
-        List<User> clients = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         try(PreparedStatement preStmt = conn.prepareStatement("SELECT * FROM Users")) {
             try(ResultSet result = preStmt.executeQuery()) {
                 while (result.next()) {
-                    clients.add(extractUser(result));
+                    users.add(extractUser(result));
                 }
             }
         } catch (SQLException e) {
             PopupMessage.showErrorMessage("DB error " + e);
         }
-        return clients;
+        return users;
     }
 
     @Override

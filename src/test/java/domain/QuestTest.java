@@ -23,14 +23,14 @@ public class QuestTest {
         quest.setPlayerId(4);
         quest.setDateOfPosting(LocalDateTime.MIN);
         quest.setReward(70);
-        quest.setStatus(QuestStatus.finished);
+        quest.setStatus(QuestStatus.completed);
         quest.setWord("word1");
         assertEquals(2, quest.getId());
         assertEquals(3, quest.getGiverId());
         assertEquals(4, quest.getPlayerId());
         assertEquals(LocalDateTime.MIN, quest.getDateOfPosting());
         assertEquals(70, quest.getReward());
-        assertEquals(QuestStatus.finished, quest.getStatus());
+        assertEquals(QuestStatus.completed, quest.getStatus());
         assertEquals("word1", quest.getWord());
     }
 }

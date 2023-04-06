@@ -1,6 +1,5 @@
 package controller;
 
-import domain.User;
 import domain.validation.ValidationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,11 +7,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import repository.RepositoryException;
-import service.Service;
+import service.QuestingService;
 import service.ServiceException;
 
 public class SignupController {
-    private Service service;
+    private QuestingService service;
     private Stage loginStage;
     @FXML
     private TextField textFieldUsername;
@@ -21,7 +20,7 @@ public class SignupController {
     @FXML
     private PasswordField passwordField;
 
-    public void setService(Service service) {
+    public void setService(QuestingService service) {
         this.service = service;
     }
 

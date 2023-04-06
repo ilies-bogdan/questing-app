@@ -1,34 +1,26 @@
 import controller.LoginController;
 import controller.PopupMessage;
-import domain.Rank;
-import domain.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import repository.RepositoryException;
-import repository.UserRepository;
+import repository.database.QuestDBRepository;
 import repository.database.UserDBRepository;
-import service.Service;
+import service.QuestingService;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 public class QuestingApplication extends Application {
-    private Service service;
+    private QuestingService service;
 
     public static void main(String[] args) {
         launch();
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException, RepositoryException {
+    public void start(Stage primaryStage) throws IOException {
         Properties props = new Properties();
         try {
             props.load(new FileReader("db.config"));
@@ -36,7 +28,9 @@ public class QuestingApplication extends Application {
             PopupMessage.showErrorMessage("Can not find database config file: " + e.getMessage());
         }
 
-        service = new Service(new UserDBRepository(props.getProperty("jdbc.url")));
+        String url = props.getProperty("jdbc.url");
+        service = new QuestingService(new UserDBRepository(url),
+                new QuestDBRepository(url));
 
         initView(primaryStage);
     }

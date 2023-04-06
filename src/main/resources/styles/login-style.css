@@ -1,8 +1,9 @@
 .root {
-    -fx-background-image: url(../images/login.jpg);
+    /* -fx-background-image: url(../images/login.jpg); */
+    -fx-background-color: #7cc0d8;
 }
 
-.label:hover {
+#labelSignUp:hover {
     -fx-text-fill: purple;
 }
 

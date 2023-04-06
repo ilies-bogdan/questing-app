@@ -20,12 +20,12 @@ public class QuestValidatorTest {
     @Test
     public void testQuestValidatorFailure() {
         Quest questInvalidReward = new Quest(1, 2, 3, LocalDateTime.MAX, 0, QuestStatus.posted, "words");
-        ValidationException validationException = assertThrows(ValidationException.class,
+        ValidationException thrown = assertThrows(ValidationException.class,
                 () -> questValidator.validate(questInvalidReward));
-        assertEquals("Reward must be greater than 0!\n", validationException.getMessage());
+        assertEquals("Reward must be greater than 0!\n", thrown.getMessage());
         Quest questInvalidWord = new Quest(1, 2, 3, LocalDateTime.MAX, 1, QuestStatus.posted, "qwert");
-        validationException = assertThrows(ValidationException.class,
+        thrown = assertThrows(ValidationException.class,
                 () -> questValidator.validate(questInvalidWord));
-        assertEquals("Unknown word!\n", validationException.getMessage());
+        assertEquals("Unknown word!\n", thrown.getMessage());
     }
 }

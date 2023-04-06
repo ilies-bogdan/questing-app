@@ -5,7 +5,7 @@ import domain.Entity;
 public interface Repository<E extends Entity<Id>, Id> {
     void add(E e) throws RepositoryException;
     void delete(E e);
-    void update(E e, Id id);
+    void update(E e, Id id) throws RepositoryException;
     E findById(Id id);
     Iterable<E> getAll();
 }

@@ -95,4 +95,24 @@ public class User implements Entity<Integer> {
     public void setTokenCount(int tokenCount) {
         this.tokenCount = tokenCount;
     }
+
+    public void updateUserRank() {
+        if (tokenCount < 100) {
+            rank = Rank.Iron;
+        } else if (tokenCount < 200) {
+            rank = Rank.Bronze;
+        } else if (tokenCount < 500) {
+            rank = Rank.Silver;
+        } else if (tokenCount < 1000) {
+            rank = Rank.Gold;
+        } else if (tokenCount < 1500) {
+            rank = Rank.Platinum;
+        } else if (tokenCount < 2000) {
+            rank = Rank.Diamond;
+        } else if (tokenCount < 3000) {
+            rank = Rank.Master;
+        } else {
+            rank = Rank.Grandmaster;
+        }
+    }
 }
