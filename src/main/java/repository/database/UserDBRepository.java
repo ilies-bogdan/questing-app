@@ -70,7 +70,7 @@ public class UserDBRepository implements UserRepository {
             preStmt.setInt(7, id);
             int result = preStmt.executeUpdate();
             if (result == 0) {
-                throw new RepositoryException("Update client failed!");
+                throw new RepositoryException("Update user failed!");
             }
         } catch (SQLException e) {
             PopupMessage.showErrorMessage("DB error " + e);

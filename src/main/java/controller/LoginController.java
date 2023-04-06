@@ -53,8 +53,8 @@ public class LoginController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/questing-view.fxml"));
             Stage stage = new Stage();
             Scene scene = new Scene(fxmlLoader.load(), 1200, 600);
-//            scene.getStylesheets()
-//                    .add(getClass().getClassLoader().getResource("styles/login-style.css").toExternalForm());
+            scene.getStylesheets()
+                    .add(getClass().getClassLoader().getResource("styles/questing-style.css").toExternalForm());
             stage.setResizable(false);
             stage.setTitle("Questie");
             stage.setScene(scene);
@@ -66,7 +66,7 @@ public class LoginController {
             mainCtr.setLoginStage(loginStage);
 
             passwordField.clear();
-            loginStage.hide();
+            // loginStage.hide();
             stage.show();
         } else {
             PopupMessage.showErrorMessage("Invalid login credentials!");

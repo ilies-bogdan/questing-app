@@ -60,8 +60,23 @@ public class QuestDBRepository implements QuestRepository {
     }
 
     @Override
-    public void update(Quest quest, Integer integer) {
-
+    public void update(Quest quest, Integer id) throws RepositoryException {
+        Connection conn = dbUtils.getConnection();
+        try(PreparedStatement preStmt = conn.prepareStatement("UPDATE Quests SET giver_id=?, player_id=?, date_of_posting=?, reward=?, status=?, word=? WHERE id=?")) {
+            preStmt.setInt(1, quest.getGiverId());
+            preStmt.setInt(2, quest.getPlayerId());
+            preStmt.setString(3, quest.getDateOfPosting().format(Constants.DATE_TIME_FORMATTER));
+            preStmt.setInt(4, quest.getReward());
+            preStmt.setString(5, quest.getStatus().toString());
+            preStmt.setString(6, quest.getWord());
+            preStmt.setInt(7, id);
+            int result = preStmt.executeUpdate();
+            if (result == 0) {
+                throw new RepositoryException("Update quest failed!");
+            }
+        } catch (SQLException e) {
+            PopupMessage.showErrorMessage("DB error " + e);
+        }
     }
 
     @Override

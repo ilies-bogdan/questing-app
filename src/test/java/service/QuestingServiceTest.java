@@ -49,8 +49,10 @@ public class QuestingServiceTest {
     @BeforeEach
     public void clearTables() {
         Connection conn = dbUtils.getConnection();
-        try(PreparedStatement preStmt = conn.prepareStatement("DELETE FROM Users; DELETE FROM Quests")) {
-            preStmt.executeUpdate();
+        try(PreparedStatement preStmtUsers = conn.prepareStatement("DELETE FROM Users");
+            PreparedStatement preStmtQuests = conn.prepareStatement("DELETE FROM Quests")) {
+            preStmtUsers.executeUpdate();
+            preStmtQuests.executeUpdate();
         } catch (SQLException e) {
             PopupMessage.showErrorMessage("DB error " + e);
         }
@@ -59,8 +61,10 @@ public class QuestingServiceTest {
     @AfterAll
     public static void clear() {
         Connection conn = dbUtils.getConnection();
-        try(PreparedStatement preStmt = conn.prepareStatement("DELETE FROM Users; DELETE FROM Quests")) {
-            preStmt.executeUpdate();
+        try(PreparedStatement preStmtUsers = conn.prepareStatement("DELETE FROM Users");
+            PreparedStatement preStmtQuests = conn.prepareStatement("DELETE FROM Quests")) {
+            preStmtUsers.executeUpdate();
+            preStmtQuests.executeUpdate();
         } catch (SQLException e) {
             PopupMessage.showErrorMessage("DB error " + e);
         }
@@ -150,6 +154,37 @@ public class QuestingServiceTest {
     }
 
     @Test
+    public void testUpdateQuestSuccess() {
+        assertDoesNotThrow(() -> service.addUser("username", "email@gmail.com", "123456"));
+        User user = service.findUserByUsername("username");
+        assertDoesNotThrow(() -> service.addUser("username1", "email1@gmail.com", "123456"));
+        User newUser = service.findUserByUsername("username1");
+
+        assertDoesNotThrow(() -> service.addQuest(user.getId(), 100, "words"));
+        assertDoesNotThrow(() -> service.updateQuest(((List<Quest>) service.getPostedQuests(user)).get(0).getId(),
+                user.getId(), newUser.getId(), LocalDateTime.parse("2023-06-04 12:10", Constants.DATE_TIME_FORMATTER),
+                        10, QuestStatus.accepted, "spice"));
+
+        Quest quest = ((List<Quest>) service.getPostedQuests(user)).get(0);
+        assertEquals(user.getId(), quest.getGiverId());
+        assertEquals(newUser.getId(), quest.getPlayerId());
+        assertEquals(LocalDateTime.parse("2023-06-04 12:10", Constants.DATE_TIME_FORMATTER), quest.getDateOfPosting());
+        assertEquals(10, quest.getReward());
+        assertEquals(QuestStatus.accepted, quest.getStatus());
+        assertEquals("spice", quest.getWord());
+    }
+
+    @Test
+    public void testUpdateQuestFailure() {
+        assertDoesNotThrow(() -> service.addUser("username", "email@gmail.com", "123456"));
+        User user = service.findUserByUsername("username");
+        assertDoesNotThrow(() -> service.addQuest(user.getId(), 100, "words"));
+        assertThrows(RepositoryException.class, () -> service.updateQuest(0, user.getId(), 0,
+                LocalDateTime.parse("2023-06-04 12:10", Constants.DATE_TIME_FORMATTER),
+                10, QuestStatus.accepted, "spice"));
+    }
+
+    @Test
     public void testGetPostedQuests() {
         assertDoesNotThrow(() -> service.addUser("username", "email@gmail.com", "123456"));
         User user = service.findUserByUsername("username");
@@ -161,6 +196,48 @@ public class QuestingServiceTest {
             assertEquals(100, quest.getReward());
             assertEquals(QuestStatus.posted, quest.getStatus());
             assertEquals("words", quest.getWord());
+        }
+    }
+
+    @Test
+    public void testGetAvailableQuests() {
+        assertDoesNotThrow(() -> service.addUser("username", "email@gmail.com", "123456"));
+        User user = service.findUserByUsername("username");
+        assertDoesNotThrow(() -> service.addQuest(user.getId(), 100, "words"));
+
+        assertDoesNotThrow(() -> service.addUser("username1", "email1@gmail.com", "123456"));
+        User other = service.findUserByUsername("username1");
+        List<Quest> quests = (List<Quest>) service.getAvailableQuests(other);
+        assertEquals(1, quests.size());
+        for (Quest quest : quests) {
+            assertEquals(user.getId(), quest.getGiverId());
+            assertEquals(100, quest.getReward());
+            assertEquals(QuestStatus.posted, quest.getStatus());
+            assertEquals("words", quest.getWord());
+        }
+    }
+
+    @Test
+    public void testGetQuestJournal() {
+        assertDoesNotThrow(() -> service.addUser("username", "email@gmail.com", "123456"));
+        User user = service.findUserByUsername("username");
+        assertDoesNotThrow(() -> service.addQuest(user.getId(), 100, "words"));
+        assertDoesNotThrow(() -> service.addUser("username1", "email1@gmail.com", "123456"));
+        User other = service.findUserByUsername("username1");
+
+        Quest quest = ((List<Quest>) service.getPostedQuests(user)).get(0);
+        assertDoesNotThrow(() -> service.updateQuest(quest.getId(), user.getId(), other.getId(),
+                quest.getDateOfPosting(),quest.getReward(), quest.getStatus(), quest.getWord()));
+
+        List<Quest> quests = (List<Quest>) service.getQuestJournal(other);
+        assertEquals(1, quests.size());
+        for (Quest q : quests) {
+            assertEquals(user.getId(), q.getGiverId());
+            assertEquals(other.getId(), q.getPlayerId());
+            assertEquals(((List<Quest>) service.getPostedQuests(user)).get(0).getDateOfPosting(), q.getDateOfPosting());
+            assertEquals(((List<Quest>) service.getPostedQuests(user)).get(0).getReward(), q.getReward());
+            assertEquals(((List<Quest>) service.getPostedQuests(user)).get(0).getStatus(), q.getStatus());
+            assertEquals(((List<Quest>) service.getPostedQuests(user)).get(0).getWord(), q.getWord());
         }
     }
 }

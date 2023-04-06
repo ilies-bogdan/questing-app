@@ -20,21 +20,49 @@
         <tabs>
           <Tab closable="false" text="Quest Journal">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="518.0" prefWidth="525.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="518.0" prefWidth="525.0">
+                     <children>
+                        <TableView fx:id="tableViewQuestJournal" layoutX="14.0" layoutY="14.0" prefHeight="487.0" prefWidth="588.0">
+                          <columns>
+                            <TableColumn fx:id="tableColumnQuestJournalQuestGiver" prefWidth="128.0" text="Quest Giver" />
+                            <TableColumn fx:id="tableColumnQuestJournalGiverRank" prefWidth="102.4000244140625" text="Rank" />
+                              <TableColumn fx:id="tableColumnQuestJournalDateOfAccepting" prefWidth="153.5999755859375" text="Date of Accepting" />
+                              <TableColumn fx:id="tableColumnQuestJournalReward" minWidth="0.0" prefWidth="82.39996337890625" text="Reward" />
+                              <TableColumn fx:id="tableColumnQuestJournalStatus" maxWidth="120.0" minWidth="-1.0" prefWidth="120.0" text="Status" />
+                          </columns>
+                        </TableView>
+                        <TextArea editable="false" layoutX="631.0" layoutY="39.0" prefHeight="356.0" prefWidth="200.0" text="View your quest journal.&#10;&#10;Here you can see all quests that you have accepted and the ones that you have completed, even if you failed them.&#10;&#10;To attempt a quest, select any one from the table, then, once ready, click the button below.&#10;&#10;You will have 6 tries to try and guess the 5-letter word. Each try will give you feedback on how close you are to guessing the word.&#10;&#10;Good luck!" wrapText="true" />
+                        <Button layoutX="673.0" layoutY="421.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" text="Start Quest">
+                           <font>
+                              <Font name="Bell MT" size="16.0" />
+                           </font>
+                        </Button>
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab closable="false" text="Find a Quest">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="881.0">
                      <children>
-                        <TableView layoutX="14.0" layoutY="60.0" prefHeight="443.0" prefWidth="474.0">
+                        <TableView fx:id="tableViewAvailableQuests" layoutX="14.0" layoutY="60.0" prefHeight="443.0" prefWidth="474.0">
                           <columns>
-                            <TableColumn prefWidth="135.19997882843018" text="Quest Giver" />
-                            <TableColumn prefWidth="108.00004577636719" text="Giver Rank" />
-                              <TableColumn prefWidth="120.0" text="Date of Posting" />
-                              <TableColumn prefWidth="109.60001220703123" text="Reward" />
+                            <TableColumn fx:id="tableColumnAvailableQuestsQuestGiver" prefWidth="135.19997882843018" text="Quest Giver" />
+                            <TableColumn fx:id="tableColumnAvailableQuestsGiverRank" prefWidth="108.00004577636719" text="Rank" />
+                              <TableColumn fx:id="tableColumnAvailableQuestsDateOfPosting" prefWidth="120.0" text="Date of Posting" />
+                              <TableColumn fx:id="tableColumnAvailableQuestsReward" prefWidth="109.60001220703123" text="Reward" />
                           </columns>
                         </TableView>
+                        <TextArea editable="false" layoutX="554.0" layoutY="82.0" prefHeight="316.0" prefWidth="256.0" text="Here you can see all available quests. &#10;&#10;You can use the search bar in the upper left corner to find the quests that a certain player has posted.&#10;&#10;Once you find a quest with a suitable reward for you, select it and click the button below to accept it.&#10;&#10;Once accepted, the quest will go to your Quest Journal from where you can solve it anytime you like." wrapText="true">
+                           <font>
+                              <Font name="Bell MT" size="14.0" />
+                           </font>
+                        </TextArea>
+                        <TextField fx:id="textFieldSearchPlayer" layoutX="14.0" layoutY="24.0" promptText="Search for a player" />
+                        <Button layoutX="624.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleAcceptQuest" prefHeight="26.0" prefWidth="115.0" text="Accept Quest">
+                           <font>
+                              <Font name="Bell MT" size="16.0" />
+                           </font>
+                        </Button>
                      </children>
                   </AnchorPane>
             </content>
@@ -51,7 +79,7 @@
                               <TableColumn fx:id="tableColumnMyQuestsStatus" prefWidth="100.79998779296875" text="Status" />
                           </columns>
                         </TableView>
-                        <TextArea editable="false" layoutX="632.0" layoutY="14.0" prefHeight="487.0" prefWidth="200.0" text="View quests that you posted.&#10;&#10;Here you can see the word associated with your quest, the date you posted the quest at, the reward and its current status.&#10;&#10;When you post a new quest, its status will always be 'posted'. Once someone accepts it, its status becomes 'accepted' and finally, once completed, it becomes either 'completed' or 'failed'.&#10;&#10;If the quest is failed by the player who took it, your reward tokens get sent back to you.&#10;&#10;" wrapText="true">
+                        <TextArea editable="false" layoutX="632.0" layoutY="57.0" prefHeight="378.0" prefWidth="200.0" text="View quests that you posted.&#10;&#10;Here you can see the word associated with your quest, the date you posted the quest at, the reward and its current status.&#10;&#10;When you post a new quest, its status will always be 'posted'. Once someone accepts it, its status becomes 'accepted' and finally, once completed, it becomes either 'completed' or 'failed'.&#10;&#10;If the quest is failed by the player who took it, your reward tokens get sent back to you.&#10;&#10;" wrapText="true">
                            <font>
                               <Font name="Bell MT" size="14.0" />
                            </font>
@@ -65,21 +93,25 @@
                      <children>
                         <TextField fx:id="textFieldWord" layoutX="60.0" layoutY="72.0" promptText="Your word" />
                         <Button layoutX="60.0" layoutY="215.0" mnemonicParsing="false" onAction="#handlePostNewQuest" prefHeight="26.0" prefWidth="149.0" text="Post New Quest" />
-                        <TextArea editable="false" layoutX="440.0" layoutY="53.0" prefHeight="363.0" prefWidth="246.0" text="Post a new quest for other players to complete.&#10;&#10;Choose a word, set a reward and fire up your quest!&#10;&#10;Make sure that you have enough tokens to post the quest with your selected reward. You can see how many tokens you have in the upper left corner.&#10;&#10;You can view quests that you posted in the My Quests tab." wrapText="true">
+                        <TextArea editable="false" layoutX="440.0" layoutY="53.0" prefHeight="363.0" prefWidth="246.0" text="Post a new quest for other players to complete.&#10;&#10;Choose a word, set a reward and fire up your quest!&#10;&#10;Make sure that you have enough tokens to post the quest with your selected reward. You can see how many tokens you have in the upper right corner.&#10;&#10;You can view quests that you posted in the My Quests tab." wrapText="true">
                            <font>
                               <Font name="Bell MT" size="14.0" />
                            </font>
                         </TextArea>
                         <Spinner fx:id="spinnerReward" editable="true" layoutX="60.0" layoutY="145.0" />
-                        <Label layoutX="60.0" layoutY="128.0" text="Reward:" />
+                        <Label layoutX="60.0" layoutY="128.0" text="Reward:">
+                           <font>
+                              <Font name="Bell MT" size="12.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
               </content>
             </Tab>
         </tabs>
       </TabPane>
-      <Label fx:id="labelRankTokens" layoutX="359.0" layoutY="22.0" text="Your rank:">
+      <Label fx:id="labelRankTokens" layoutX="764.0" layoutY="18.0" text="Your rank:">
          <font>
-            <Font size="14.0" />
+            <Font name="Bell MT Bold" size="16.0" />
          </font>
       </Label>
       <ImageView fx:id="imageView" fitHeight="600.0" fitWidth="337.0" pickOnBounds="true" preserveRatio="true">
