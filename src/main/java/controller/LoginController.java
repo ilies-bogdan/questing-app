@@ -9,12 +9,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import service.QuestingService;
+import service.QuestService;
+import service.UserService;
 
 import java.io.IOException;
 
 public class LoginController {
-    private QuestingService service;
+    private UserService userSrv;
+    private QuestService questSrv;
     @FXML
     private Label labelSignUp;
     @FXML
@@ -22,8 +24,12 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    public void setService(QuestingService service) {
-        this.service = service;
+    public void setUserSrv(UserService userSrv) {
+        this.userSrv = userSrv;
+    }
+
+    public void setQuestSrv(QuestService questSrv) {
+        this.questSrv = questSrv;
     }
 
     public void handleSignUpRequest(MouseEvent mouseEvent) throws IOException {
@@ -37,7 +43,7 @@ public class LoginController {
         stage.setScene(scene);
 
         SignupController signupCtr = fxmlLoader.getController();
-        signupCtr.setService(service);
+        signupCtr.setService(userSrv);
         Stage loginStage  = (Stage) textFieldUsername.getScene().getWindow();
         signupCtr.setLoginStage(loginStage);
         loginStage.hide();
@@ -49,7 +55,7 @@ public class LoginController {
         String username = textFieldUsername.getText();
         String password = passwordField.getText();
 
-        if (service.checkPassword(username, password)) {
+        if (userSrv.checkPassword(username, password)) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/questing-view.fxml"));
             Stage stage = new Stage();
             Scene scene = new Scene(fxmlLoader.load(), 1200, 600);
@@ -59,11 +65,12 @@ public class LoginController {
             stage.setTitle("Questie");
             stage.setScene(scene);
 
-            QuestingController mainCtr = fxmlLoader.getController();
-            mainCtr.setService(service);
-            mainCtr.setUser(service.findUserByUsername(username));
+            QuestingController questingCtr = fxmlLoader.getController();
+            questingCtr.setUserSrv(userSrv);
+            questingCtr.setQuestSrv(questSrv);
+            questingCtr.setUser(userSrv.findUserByUsername(username));
             Stage loginStage  = (Stage) textFieldUsername.getScene().getWindow();
-            mainCtr.setLoginStage(loginStage);
+            questingCtr.setLoginStage(loginStage);
 
             passwordField.clear();
             // loginStage.hide();

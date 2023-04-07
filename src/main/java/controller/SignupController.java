@@ -7,11 +7,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import repository.RepositoryException;
-import service.QuestingService;
+import service.QuestService;
 import service.ServiceException;
+import service.UserService;
 
 public class SignupController {
-    private QuestingService service;
+    private UserService userSrv;
     private Stage loginStage;
     @FXML
     private TextField textFieldUsername;
@@ -20,8 +21,8 @@ public class SignupController {
     @FXML
     private PasswordField passwordField;
 
-    public void setService(QuestingService service) {
-        this.service = service;
+    public void setService(UserService userSrv) {
+        this.userSrv = userSrv;
     }
 
     public void setLoginStage(Stage loginStage) {
@@ -33,7 +34,7 @@ public class SignupController {
         String email = textFieldEmail.getText();
         String password = passwordField.getText();
         try {
-            service.addUser(username, email, password);
+            userSrv.addUser(username, email, password);
             PopupMessage.showInformationMessage("Account created successfully!");
             Stage signupStage  = (Stage) textFieldUsername.getScene().getWindow();
             signupStage.close();

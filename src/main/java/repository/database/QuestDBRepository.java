@@ -4,12 +4,13 @@ import controller.PopupMessage;
 import domain.Quest;
 import domain.QuestStatus;
 import domain.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import repository.QuestRepository;
 import repository.RepositoryException;
 import utils.Constants;
 import utils.JdbcUtils;
 
-import java.lang.constant.Constable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestDBRepository implements QuestRepository {
+    public static final Logger logger = LogManager.getLogger();
     private final JdbcUtils dbUtils;
 
     public QuestDBRepository(String url) {
+        logger.info("Initializing QuestDBRepository with the following url: {}", url);
         this.dbUtils = new JdbcUtils(url);
     }
 
@@ -38,6 +41,7 @@ public class QuestDBRepository implements QuestRepository {
 
     @Override
     public void add(Quest quest) throws RepositoryException {
+        logger.traceEntry("Adding quest: {}", quest);
         Connection conn = dbUtils.getConnection();
         try(PreparedStatement preStmt = conn.prepareStatement("INSERT INTO Quests (giver_id, date_of_posting, reward, status, word) VALUES (?, ?, ?, ?, ?)")) {
             preStmt.setInt(1, quest.getGiverId());
@@ -49,9 +53,12 @@ public class QuestDBRepository implements QuestRepository {
             if (result == 0) {
                 throw new RepositoryException("Add quest failed!");
             }
+            logger.traceExit("Added {} instances", result);
         } catch (SQLException e) {
+            logger.error(e);
             PopupMessage.showErrorMessage("DB error " + e);
         }
+        logger.traceExit();
     }
 
     @Override
@@ -61,6 +68,7 @@ public class QuestDBRepository implements QuestRepository {
 
     @Override
     public void update(Quest quest, Integer id) throws RepositoryException {
+        logger.traceEntry("Updating quest: {}, {}", id, quest);
         Connection conn = dbUtils.getConnection();
         try(PreparedStatement preStmt = conn.prepareStatement("UPDATE Quests SET giver_id=?, player_id=?, date_of_posting=?, reward=?, status=?, word=? WHERE id=?")) {
             preStmt.setInt(1, quest.getGiverId());
@@ -74,29 +82,38 @@ public class QuestDBRepository implements QuestRepository {
             if (result == 0) {
                 throw new RepositoryException("Update quest failed!");
             }
+            logger.traceExit("Updated {} instances", result);
         } catch (SQLException e) {
+            logger.error(e);
             PopupMessage.showErrorMessage("DB error " + e);
         }
+        logger.traceExit();
     }
 
     @Override
     public Quest findById(Integer id) {
+        logger.traceEntry("Finding by ID: {}", id);
         Connection conn = dbUtils.getConnection();
         try(PreparedStatement preStmt = conn.prepareStatement("SELECT * FROM Quests WHERE id=?")) {
             preStmt.setInt(1, id);
             try(ResultSet result = preStmt.executeQuery()) {
                 if (result.next()) {
-                    return extractQuest(result);
+                    Quest quest = extractQuest(result);
+                    logger.traceExit("Found: {}", quest);
+                    return quest;
                 }
             }
         } catch (SQLException e) {
+            logger.error(e);
             PopupMessage.showErrorMessage("DB error " + e);
         }
+        logger.traceExit("Found: {}", null);
         return null;
     }
 
     @Override
     public Iterable<Quest> getAll() {
+        logger.traceEntry("Getting all");
         Connection conn = dbUtils.getConnection();
         List<Quest> quests = new ArrayList<>();
         try(PreparedStatement preStmt = conn.prepareStatement("SELECT * FROM Quests")) {
@@ -106,8 +123,10 @@ public class QuestDBRepository implements QuestRepository {
                 }
             }
         } catch (SQLException e) {
+            logger.error(e);
             PopupMessage.showErrorMessage("DB error " + e);
         }
+        logger.traceExit();
         return quests;
     }
 }

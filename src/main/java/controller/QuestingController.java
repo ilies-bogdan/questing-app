@@ -13,8 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import repository.RepositoryException;
-import service.QuestingService;
+import service.QuestService;
 import service.ServiceException;
+import service.UserService;
 import utils.Constants;
 import utils.observer.Observer;
 
@@ -26,7 +27,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class QuestingController implements Observer {
-    private QuestingService service;
+    private UserService userSrv;
+    private QuestService questSrv;
     private User user;
     private Stage loginStage;
     private ObservableList<Quest> modelMyQuests = FXCollections.observableArrayList();
@@ -73,8 +75,14 @@ public class QuestingController implements Observer {
     @FXML
     private Spinner<Integer> spinnerReward;
 
-    public void setService(QuestingService service) {
-        this.service = service;
+    public void setUserSrv(UserService userSrv) {
+        this.userSrv = userSrv;
+        userSrv.addObserver(this);
+    }
+
+    public void setQuestSrv(QuestService questSrv) {
+        this.questSrv = questSrv;
+        questSrv.addObserver(this);
     }
 
     public void setUser(User user) {
@@ -83,7 +91,6 @@ public class QuestingController implements Observer {
 
     public void setLoginStage(Stage loginStage) {
         this.loginStage = loginStage;
-        service.addObserver(this);
         initModel();
     }
 
@@ -98,17 +105,17 @@ public class QuestingController implements Observer {
         tableViewMyQuests.setPlaceholder(new Label("You have posted no quests"));
         spinnerReward.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000));
         labelRankTokens.setText("Your rank: " + user.getRank() + " | You have " + user.getTokenCount() + " tokens.");
-        modelQuestJournal.setAll((Collection<Quest>) service.getQuestJournal(user));
-        modelAvailableQuests.setAll((Collection<Quest>) service.getAvailableQuests(user));
-        modelMyQuests.setAll((Collection<Quest>) service.getPostedQuests(user));
+        modelQuestJournal.setAll((Collection<Quest>) questSrv.getQuestJournal(user));
+        modelAvailableQuests.setAll((Collection<Quest>) questSrv.getAvailableQuests(user));
+        modelMyQuests.setAll((Collection<Quest>) questSrv.getPostedQuests(user));
     }
 
     @FXML
     public void initialize() {
         tableColumnQuestJournalQuestGiver.setCellValueFactory(param ->
-                new ReadOnlyObjectWrapper<>(service.findUserById(param.getValue().getGiverId()).getUsername()));
+                new ReadOnlyObjectWrapper<>(userSrv.findUserById(param.getValue().getGiverId()).getUsername()));
         tableColumnQuestJournalGiverRank.setCellValueFactory(param ->
-                new ReadOnlyObjectWrapper<>(service.findUserById(param.getValue().getGiverId()).getRank().toString()));
+                new ReadOnlyObjectWrapper<>(userSrv.findUserById(param.getValue().getGiverId()).getRank().toString()));
         tableColumnQuestJournalDateOfAccepting.setCellValueFactory(param ->
                 new ReadOnlyObjectWrapper<>(param.getValue().getDateOfPosting().format(Constants.DATE_TIME_FORMATTER)));
         tableColumnQuestJournalReward.setCellValueFactory(new PropertyValueFactory<>("reward"));
@@ -116,9 +123,9 @@ public class QuestingController implements Observer {
         tableViewQuestJournal.setItems(modelQuestJournal);
 
         tableColumnAvailableQuestsQuestGiver.setCellValueFactory(param ->
-                new ReadOnlyObjectWrapper<>(service.findUserById(param.getValue().getGiverId()).getUsername()));
+                new ReadOnlyObjectWrapper<>(userSrv.findUserById(param.getValue().getGiverId()).getUsername()));
         tableColumnAvailableQuestsGiverRank.setCellValueFactory(param ->
-                new ReadOnlyObjectWrapper<>(service.findUserById(param.getValue().getGiverId()).getRank().toString()));
+                new ReadOnlyObjectWrapper<>(userSrv.findUserById(param.getValue().getGiverId()).getRank().toString()));
         tableColumnAvailableQuestsDateOfPosting.setCellValueFactory(param ->
                 new ReadOnlyObjectWrapper<>(param.getValue().getDateOfPosting().format(Constants.DATE_TIME_FORMATTER)));
         tableColumnAvailableQuestsReward.setCellValueFactory(new PropertyValueFactory<>("reward"));
@@ -136,10 +143,10 @@ public class QuestingController implements Observer {
 
     private void handleSearch() {
         Predicate<Quest> byPlayer = quest ->
-            service.findUserById(quest.getGiverId())
-                    .getUsername().toLowerCase().startsWith(textFieldSearchPlayer.getText());
+            userSrv.findUserById(quest.getGiverId())
+                    .getUsername().toLowerCase().startsWith(textFieldSearchPlayer.getText().toLowerCase());
         modelAvailableQuests.setAll(StreamSupport.stream(
-                service.getAvailableQuests(user).spliterator(),false)
+                questSrv.getAvailableQuests(user).spliterator(),false)
                 .filter(byPlayer)
                 .collect(Collectors.toList()));
     }
@@ -154,10 +161,10 @@ public class QuestingController implements Observer {
         }
 
         try {
-            service.addQuest(user.getId(), reward, word);
+            questSrv.addQuest(user.getId(), reward, word);
             user.setTokenCount(user.getTokenCount() - reward);
             user.updateUserRank();
-            service.updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPasswordCode(),
+            userSrv.updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPasswordCode(),
                     user.getSalt(), user.getRank(), user.getTokenCount());
             textFieldWord.clear();
             spinnerReward.getEditor().textProperty().set("1");
@@ -183,7 +190,7 @@ public class QuestingController implements Observer {
         }
 
         try {
-            service.updateQuest(quest.getId(), quest.getGiverId(), user.getId(),
+            questSrv.updateQuest(quest.getId(), quest.getGiverId(), user.getId(),
                     LocalDateTime.now(), quest.getReward(), QuestStatus.accepted, quest.getWord());
             PopupMessage.showInformationMessage("Quest accepted!");
         } catch (RepositoryException e) {

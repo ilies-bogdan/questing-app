@@ -96,6 +96,11 @@ public class User implements Entity<Integer> {
         this.tokenCount = tokenCount;
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
+
     public void updateUserRank() {
         if (tokenCount < 100) {
             rank = Rank.Iron;
