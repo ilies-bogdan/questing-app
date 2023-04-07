@@ -40,12 +40,25 @@ public class QuestValidator implements AbstractQuestValidator {
         }
 
         String word = quest.getWord();
+        try {
+            validateWord(word);
+        } catch (ValidationException e) {
+            errorMessage += e.getMessage();
+        }
+
+        if (errorMessage.length() > 0) {
+            throw new ValidationException(errorMessage);
+        }
+    }
+
+    @Override
+    public void validateWord(String word) throws ValidationException {
+        String errorMessage = "";
         if (word.length() != Constants.WORD_SIZE) {
             errorMessage += "Word must have " + Constants.WORD_SIZE + " letters!";
         } else if (!words.contains(word)) {
             errorMessage += "Unknown word!\n";
         }
-
         if (errorMessage.length() > 0) {
             throw new ValidationException(errorMessage);
         }

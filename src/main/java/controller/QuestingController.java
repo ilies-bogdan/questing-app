@@ -9,6 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -19,6 +21,7 @@ import service.UserService;
 import utils.Constants;
 import utils.observer.Observer;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
@@ -100,6 +103,7 @@ public class QuestingController implements Observer {
     }
 
     private void initModel() {
+        user = userSrv.findUserById(user.getId());
         tableViewQuestJournal.setPlaceholder(new Label("Journal is empty"));
         tableViewAvailableQuests.setPlaceholder(new Label("No quests available"));
         tableViewMyQuests.setPlaceholder(new Label("You have posted no quests"));
@@ -196,5 +200,41 @@ public class QuestingController implements Observer {
         } catch (RepositoryException e) {
             PopupMessage.showErrorMessage(e.getMessage());
         }
+    }
+
+    public void handleStartQuest(ActionEvent event) throws IOException {
+        if (tableViewQuestJournal.getSelectionModel().isEmpty()) {
+            PopupMessage.showErrorMessage("No quest selected!");
+            return;
+        }
+
+        Quest quest = tableViewQuestJournal.getSelectionModel().getSelectedItem();
+        if (quest.getStatus() != QuestStatus.accepted) {
+            PopupMessage.showErrorMessage("Can not redo quest!");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Are you sure?");
+        alert.setContentText("Once started, you must finish the quest or you will fail it.");
+        Optional<ButtonType> option =  alert.showAndWait();
+        if (option.isEmpty() || option.get() == ButtonType.CANCEL) {
+            return;
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/game-view.fxml"));
+        Stage stage = new Stage();
+        Scene scene = new Scene(fxmlLoader.load(), 900, 540);
+        scene.getStylesheets()
+                .add(getClass().getClassLoader().getResource("styles/game-style.css").toExternalForm());
+        stage.setResizable(false);
+        stage.setTitle("Quest");
+        stage.setScene(scene);
+
+        GameController gameCtr = fxmlLoader.getController();
+        gameCtr.setUserSrv(userSrv);
+        gameCtr.setQuestServicev(questSrv);
+        gameCtr.setQuest(quest);
+        stage.show();
     }
 }

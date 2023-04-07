@@ -3,5 +3,6 @@ package domain;
 public enum QuestStatus {
     posted,
     accepted,
-    completed
+    completed,
+    failed
 }

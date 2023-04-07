@@ -1,5 +1,6 @@
 package service;
 
+import domain.LetterStatus;
 import domain.Quest;
 import domain.QuestStatus;
 import domain.User;
@@ -7,7 +8,6 @@ import domain.validation.*;
 import repository.QuestRepository;
 import repository.RepositoryException;
 import repository.UserRepository;
-import utils.observer.Observable;
 import utils.observer.Observer;
 
 import java.time.LocalDateTime;
@@ -18,14 +18,12 @@ import java.util.stream.StreamSupport;
 
 public class QuestService implements Service {
     private UserRepository userRepo;
-    private final AbstractUserValidator userValidator;
     private QuestRepository questRepo;
     private final AbstractQuestValidator questValidator;
     private List<Observer> observers = new ArrayList<>();
 
     public QuestService(UserRepository userRepo, QuestRepository questRepo) {
         this.userRepo = userRepo;
-        this.userValidator = new UserValidator();
         this.questRepo = questRepo;
         this.questValidator = new QuestValidator();
     }
@@ -46,6 +44,11 @@ public class QuestService implements Service {
             observer.update();
         }
     }
+
+    public void validateWord(String word) throws ValidationException {
+        questValidator.validateWord(word);
+    }
+
     public void addQuest(int giverId, int reward, String word) throws ValidationException, RepositoryException, ServiceException {
         Quest quest = new Quest(giverId, 0, LocalDateTime.now(), reward, QuestStatus.posted, word.toLowerCase());
         User user = userRepo.findById(giverId);
@@ -69,7 +72,7 @@ public class QuestService implements Service {
     }
 
     /**
-     * Finds all the quests a user has posted
+     * Finds all the quests a user has posted.
      * @param user - the user whose quests are being looked for
      * @return iterable object containing quests
      */
@@ -80,7 +83,7 @@ public class QuestService implements Service {
     }
 
     /**
-     * Finds all the quests that are available to a user
+     * Finds all the quests that are available to a user.
      * @param user - the user whose available quests are being looked for
      * @return iterable object containing quests
      */
@@ -93,7 +96,7 @@ public class QuestService implements Service {
     }
 
     /**
-     * Finds all the quests that a user has accepted
+     * Finds all the quests that a user has accepted.
      * @param user - the user whose accepted quests are being looked for
      * @return iterable object containing quests
      */
@@ -101,5 +104,24 @@ public class QuestService implements Service {
         return StreamSupport.stream(questRepo.getAll().spliterator(), false)
                 .filter(quest -> quest.getPlayerId() == user.getId())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Checks if a letter appears in a word
+     * @param index - the index of the letter in the word
+     * @param letter - the letter character
+     * @param word - the word
+     * @return LetterStatus.correct if the letter is on the correct position in the word
+     *         LetterStatus.appears if the letter appears in the word but is not in the correct position
+     *         LetterStatus.incorrect if the letter does not appear in the word at all
+     */
+    public LetterStatus getLetterStatus(int index, char letter, String word) {
+        if (word.charAt(index) == letter) {
+            return LetterStatus.correct;
+        }
+        if (word.contains(String.valueOf(letter))) {
+            return LetterStatus.appears;
+        }
+        return LetterStatus.incorrect;
     }
 }

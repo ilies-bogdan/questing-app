@@ -114,3 +114,13 @@
     -fx-font-family: "Bell MT";
     -fx-font-size: 14px;
 }
+
+.button {
+    -fx-background-radius: 30;
+    -fx-background-color: linear-gradient(#93efd3, #52efe2);
+}
+
+.spinner {
+    -fx-background-color: transparent;
+    -fx-border-radius: 5;
+}

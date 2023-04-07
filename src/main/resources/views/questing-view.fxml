@@ -32,7 +32,7 @@
                           </columns>
                         </TableView>
                         <TextArea editable="false" layoutX="631.0" layoutY="39.0" prefHeight="356.0" prefWidth="200.0" text="View your quest journal.&#10;&#10;Here you can see all quests that you have accepted and the ones that you have completed, even if you failed them.&#10;&#10;To attempt a quest, select any one from the table, then, once ready, click the button below.&#10;&#10;You will have 6 tries to try and guess the 5-letter word. Each try will give you feedback on how close you are to guessing the word.&#10;&#10;Good luck!" wrapText="true" />
-                        <Button layoutX="673.0" layoutY="421.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" text="Start Quest">
+                        <Button layoutX="673.0" layoutY="421.0" mnemonicParsing="false" onAction="#handleStartQuest" prefHeight="26.0" prefWidth="115.0" text="Start Quest">
                            <font>
                               <Font name="Bell MT" size="16.0" />
                            </font>
