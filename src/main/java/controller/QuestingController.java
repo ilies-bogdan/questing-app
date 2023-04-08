@@ -1,8 +1,6 @@
 package controller;
 
-import domain.Quest;
-import domain.QuestStatus;
-import domain.User;
+import domain.*;
 import domain.validation.ValidationException;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -15,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import repository.RepositoryException;
+import service.BadgeService;
 import service.QuestService;
 import service.ServiceException;
 import service.UserService;
@@ -24,6 +23,7 @@ import utils.observer.Observer;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -32,6 +32,7 @@ import java.util.stream.StreamSupport;
 public class QuestingController implements Observer {
     private UserService userSrv;
     private QuestService questSrv;
+    private BadgeService badgeSrv;
     private User user;
     private Stage loginStage;
     private ObservableList<Quest> modelMyQuests = FXCollections.observableArrayList();
@@ -86,6 +87,10 @@ public class QuestingController implements Observer {
     public void setQuestSrv(QuestService questSrv) {
         this.questSrv = questSrv;
         questSrv.addObserver(this);
+    }
+
+    public void setBadgeSrv(BadgeService badgeSrv) {
+        this.badgeSrv = badgeSrv;
     }
 
     public void setUser(User user) {
@@ -173,6 +178,7 @@ public class QuestingController implements Observer {
             textFieldWord.clear();
             spinnerReward.getEditor().textProperty().set("1");
             PopupMessage.showInformationMessage("Quest posted!");
+            awardBadges();
         } catch (ValidationException | RepositoryException | ServiceException e) {
             PopupMessage.showErrorMessage(e.getMessage());
         }
@@ -233,8 +239,43 @@ public class QuestingController implements Observer {
 
         GameController gameCtr = fxmlLoader.getController();
         gameCtr.setUserSrv(userSrv);
-        gameCtr.setQuestServicev(questSrv);
+        gameCtr.setQuestService(questSrv);
+        gameCtr.setBadgeSrv(badgeSrv);
         gameCtr.setQuest(quest);
         stage.show();
+    }
+
+    public void handleViewBadges(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/badge-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 900, 540);
+        Stage stage = new Stage();
+        scene.getStylesheets()
+                .add(getClass().getClassLoader().getResource("styles/questing-style.css").toExternalForm());
+        stage.setResizable(false);
+        stage.setTitle("Badges");
+        stage.setScene(scene);
+
+        BadgeController badgeCtr = fxmlLoader.getController();
+        badgeCtr.setBadgeSrv(badgeSrv);
+        badgeCtr.setUser(user);
+
+        stage.show();
+    }
+
+    private void awardBadges() {
+        for (Badge badge : badgeSrv.getAllBadges()) {
+            if (!badgeSrv.userHasBadge(user, badge)) {
+                if (badge.getType() == BadgeType.post) {
+                    if (((List<Quest>) questSrv.getPostedQuests(user)).size() >= badge.getRequirement()) {
+                        try {
+                            badgeSrv.addBadgeToUser(user, badge);
+                            PopupMessage.showInformationMessage("You earned a badge: " + badge.getTitle());
+                        } catch (RepositoryException e) {
+                            PopupMessage.showErrorMessage(e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
     }
 }

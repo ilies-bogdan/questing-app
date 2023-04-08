@@ -1,7 +1,7 @@
 package service;
 
 import controller.PopupMessage;
-import domain.Rank;
+import domain.UserRank;
 import domain.User;
 import domain.validation.ValidationException;
 import org.junit.jupiter.api.BeforeAll;
@@ -97,19 +97,19 @@ public class UserServiceTest {
     public void testUpdateUserSuccess() {
         assertDoesNotThrow(() -> userSrv.addUser("username", "email@gmail.com", "123456"));
         assertDoesNotThrow(() -> userSrv.updateUser(userSrv.findUserByUsername("username").getId(),
-                "username1", "email1", 2, "salt1", Rank.Silver, 1000));
+                "username1", "email1", 2, "salt1", UserRank.Silver, 1000));
         assertEquals("username1", userSrv.findUserByUsername("username1").getUsername());
         assertEquals("email1", userSrv.findUserByUsername("username1").getEmail());
         assertEquals(2, userSrv.findUserByUsername("username1").getPasswordCode());
         assertEquals("salt1", userSrv.findUserByUsername("username1").getSalt());
-        assertEquals(Rank.Silver, userSrv.findUserByUsername("username1").getRank());
+        assertEquals(UserRank.Silver, userSrv.findUserByUsername("username1").getRank());
         assertEquals(1000, userSrv.findUserByUsername("username1").getTokenCount());
     }
 
     @Test
     public void testUpdateUserFailure() {
         assertThrows(RepositoryException.class, () -> userSrv.updateUser(1, "username1", "email1",
-                2, "salt1", Rank.Silver, 1000));
+                2, "salt1", UserRank.Silver, 1000));
     }
 
 }

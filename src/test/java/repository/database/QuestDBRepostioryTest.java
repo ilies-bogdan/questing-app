@@ -3,7 +3,7 @@ package repository.database;
 import controller.PopupMessage;
 import domain.Quest;
 import domain.QuestStatus;
-import domain.Rank;
+import domain.UserRank;
 import domain.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -68,7 +68,7 @@ public class QuestDBRepostioryTest {
 
     @Test
     public void testAddQuestSuccess() {
-        User user = new User("username", "email", 1, "salt", Rank.Bronze, 100);
+        User user = new User("username", "email", 1, "salt", UserRank.Bronze, 100);
         assertDoesNotThrow(() -> userRepo.add(user));
         User found = userRepo.findByUsername("username");
 
@@ -85,9 +85,9 @@ public class QuestDBRepostioryTest {
 
     @Test
     public void testUpdateQuestSuccess() {
-        assertDoesNotThrow(() -> userRepo.add(new User("username", "email", 1, "salt", Rank.Bronze, 100)));
+        assertDoesNotThrow(() -> userRepo.add(new User("username", "email", 1, "salt", UserRank.Bronze, 100)));
         User user = userRepo.findByUsername("username");
-        assertDoesNotThrow(() -> userRepo.add(new User("username1", "email1", 1, "salt", Rank.Bronze, 100)));
+        assertDoesNotThrow(() -> userRepo.add(new User("username1", "email1", 1, "salt", UserRank.Bronze, 100)));
         User newUser = userRepo.findByUsername("username1");
 
         assertDoesNotThrow(() -> questRepo.add(new Quest(user.getId(), user.getId(),
@@ -110,7 +110,7 @@ public class QuestDBRepostioryTest {
 
     @Test
     public void testUpdateQuestFailure() {
-        assertDoesNotThrow(() -> userRepo.add(new User("username", "email", 1, "salt", Rank.Bronze, 100)));
+        assertDoesNotThrow(() -> userRepo.add(new User("username", "email", 1, "salt", UserRank.Bronze, 100)));
         User user = userRepo.findByUsername("username");
         assertDoesNotThrow(() -> questRepo.add(new Quest(user.getId(), user.getId(),
                 LocalDateTime.parse("2023-04-06 18:30", Constants.DATE_TIME_FORMATTER),

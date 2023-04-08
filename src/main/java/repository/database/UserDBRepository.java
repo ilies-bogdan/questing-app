@@ -1,7 +1,7 @@
 package repository.database;
 
 import controller.PopupMessage;
-import domain.Rank;
+import domain.UserRank;
 import domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +31,7 @@ public class UserDBRepository implements UserRepository {
         String email = resultSet.getString("email");
         int passwordCode = resultSet.getInt("password_code");
         String salt = resultSet.getString("salt");
-        Rank rank = Rank.valueOf(resultSet.getString("rank"));
+        UserRank rank = UserRank.valueOf(resultSet.getString("rank"));
         int tokenCount = resultSet.getInt("token_count");
         return new User(id, username, email, passwordCode, salt, rank, tokenCount);
     }

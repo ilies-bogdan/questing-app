@@ -48,6 +48,11 @@ public class UserValidator implements AbstractUserValidator {
         }
     }
 
+    /**
+     * Validates a password
+     * @param password - the password to be validated
+     * @throws ValidationException if the password is too short
+     */
     public void validatePassword(String password) throws ValidationException {
         String message = "";
         if (password == null || password.trim().length() < Constants.MINIMUM_PASSWORD_LENGTH) {

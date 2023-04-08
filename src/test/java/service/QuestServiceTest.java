@@ -165,7 +165,7 @@ public class QuestServiceTest {
 
         Quest quest = ((List<Quest>) questSrv.getPostedQuests(user)).get(0);
         assertDoesNotThrow(() -> questSrv.updateQuest(quest.getId(), user.getId(), other.getId(),
-                quest.getDateOfPosting(),quest.getReward(), quest.getStatus(), quest.getWord()));
+                quest.getDateOfPosting(), quest.getReward(), quest.getStatus(), quest.getWord()));
 
         List<Quest> quests = (List<Quest>) questSrv.getQuestJournal(other);
         assertEquals(1, quests.size());
@@ -177,5 +177,17 @@ public class QuestServiceTest {
             assertEquals(((List<Quest>) questSrv.getPostedQuests(user)).get(0).getStatus(), q.getStatus());
             assertEquals(((List<Quest>) questSrv.getPostedQuests(user)).get(0).getWord(), q.getWord());
         }
+    }
+
+    @Test
+    public void testGetCompletedQuestsCount() {
+        assertDoesNotThrow(() -> userSrv.addUser("username", "email@gmail.com", "123456"));
+        User user = userSrv.findUserByUsername("username");
+        assertDoesNotThrow(() -> questSrv.addQuest(user.getId(), 100, "words"));
+
+        Quest quest = ((List<Quest>) questSrv.getPostedQuests(user)).get(0);
+        assertDoesNotThrow(() -> questSrv.updateQuest(quest.getId(), user.getId(), user.getId(),
+                quest.getDateOfPosting(), quest.getReward(), QuestStatus.completed, quest.getWord()));
+        assertEquals(1, questSrv.getCompletedQuestsCount(user));
     }
 }

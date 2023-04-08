@@ -106,6 +106,12 @@ public class QuestService implements Service {
                 .collect(Collectors.toList());
     }
 
+    public int getCompletedQuestsCount(User user) {
+        return StreamSupport.stream(questRepo.getAll().spliterator(), false)
+                .filter(quest -> quest.getPlayerId() == user.getId() && quest.getStatus() == QuestStatus.completed)
+                .toList().size();
+    }
+
     /**
      * Checks if a letter appears in a word
      * @param index - the index of the letter in the word

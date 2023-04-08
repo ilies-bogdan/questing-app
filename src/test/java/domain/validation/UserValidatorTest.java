@@ -1,6 +1,6 @@
 package domain.validation;
 
-import domain.Rank;
+import domain.UserRank;
 import domain.User;
 import org.junit.jupiter.api.Test;
 import utils.Constants;
@@ -12,7 +12,7 @@ public class UserValidatorTest {
 
     @Test
     public void testUserValidationSuccess() {
-        User user = new User(1, "username", "email@gmail.com", 1, "salt", Rank.Bronze, 100);
+        User user = new User(1, "username", "email@gmail.com", 1, "salt", UserRank.Bronze, 100);
         assertDoesNotThrow(() -> userValidator.validate(user));
     }
 

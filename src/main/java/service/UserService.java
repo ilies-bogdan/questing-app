@@ -1,6 +1,6 @@
 package service;
 
-import domain.Rank;
+import domain.UserRank;
 import domain.User;
 import domain.validation.AbstractUserValidator;
 import domain.validation.UserValidator;
@@ -49,7 +49,7 @@ public class UserService implements Service {
         // storing the resulted code, as well as the random string
         String salt = RandomString.getRandomString(Constants.SALT_SIZE);
         int passwordCode = Objects.hash(password + salt);
-        User user = new User(username, email, passwordCode, salt, Rank.Bronze, Constants.INITIAL_TOKEN_COUNT);
+        User user = new User(username, email, passwordCode, salt, UserRank.Bronze, Constants.INITIAL_TOKEN_COUNT);
         userValidator.validate(user);
         userValidator.validatePassword(password);
 
@@ -72,7 +72,7 @@ public class UserService implements Service {
     }
 
     public void updateUser(int id, String newUsername, String newEmail, int newPasswordCode,
-                           String newSalt, Rank newRank, int newTokenCount) throws RepositoryException {
+                           String newSalt, UserRank newRank, int newTokenCount) throws RepositoryException {
         userRepo.update(new User(newUsername, newEmail, newPasswordCode,
                 newSalt, newRank, newTokenCount), id);
         notifyAllObservers();

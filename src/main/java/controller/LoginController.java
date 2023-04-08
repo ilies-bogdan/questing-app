@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import service.BadgeService;
 import service.QuestService;
 import service.UserService;
 
@@ -17,6 +18,7 @@ import java.io.IOException;
 public class LoginController {
     private UserService userSrv;
     private QuestService questSrv;
+    private BadgeService badgeSrv;
     @FXML
     private Label labelSignUp;
     @FXML
@@ -30,6 +32,10 @@ public class LoginController {
 
     public void setQuestSrv(QuestService questSrv) {
         this.questSrv = questSrv;
+    }
+
+    public void setBadgeSrv(BadgeService badgeSrv) {
+        this.badgeSrv = badgeSrv;
     }
 
     public void handleSignUpRequest(MouseEvent mouseEvent) throws IOException {
@@ -68,6 +74,7 @@ public class LoginController {
             QuestingController questingCtr = fxmlLoader.getController();
             questingCtr.setUserSrv(userSrv);
             questingCtr.setQuestSrv(questSrv);
+            questingCtr.setBadgeSrv(badgeSrv);
             questingCtr.setUser(userSrv.findUserByUsername(username));
             Stage loginStage  = (Stage) textFieldUsername.getScene().getWindow();
             questingCtr.setLoginStage(loginStage);

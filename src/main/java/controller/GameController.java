@@ -1,8 +1,6 @@
 package controller;
 
-import domain.Quest;
-import domain.QuestStatus;
-import domain.User;
+import domain.*;
 import domain.validation.ValidationException;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,17 +12,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import repository.AwardedBadgeRepository;
 import repository.RepositoryException;
+import service.BadgeService;
 import service.QuestService;
 import service.UserService;
 import utils.Constants;
 
-import java.awt.*;
+import java.util.List;
 import java.util.Optional;
 
 public class GameController {
     private UserService userSrv;
     private QuestService questSrv;
+    private BadgeService badgeSrv;
     private Quest quest;
     private int guessCount = 0;
     @FXML
@@ -38,8 +39,12 @@ public class GameController {
         this.userSrv = userSrv;
     }
 
-    public void setQuestServicev(QuestService questSrv) {
+    public void setQuestService(QuestService questSrv) {
         this.questSrv = questSrv;
+    }
+
+    public void setBadgeSrv(BadgeService badgeSrv) {
+        this.badgeSrv = badgeSrv;
     }
 
     public void setQuest(Quest quest) {
@@ -106,7 +111,6 @@ public class GameController {
 
         if (guessCount == Constants.MAX_GUESS_COUNT) {
             handleFailQuest();
-            return;
         }
     }
 
@@ -126,6 +130,7 @@ public class GameController {
         textFieldGuess.setDisable(true);
         buttonGuess.setDisable(true);
         PopupMessage.showInformationMessage("Quest Completed!");
+        awardBadges();
     }
 
     private void handleFailQuest() {
@@ -144,5 +149,23 @@ public class GameController {
         textFieldGuess.setDisable(true);
         buttonGuess.setDisable(true);
         PopupMessage.showInformationMessage("Quest Failed!");
+    }
+
+    private void awardBadges() {
+        User player = userSrv.findUserById(quest.getPlayerId());
+        for (Badge badge : badgeSrv.getAllBadges()) {
+            if (!badgeSrv.userHasBadge(player, badge)) {
+                if (badge.getType() == BadgeType.complete) {
+                    if (questSrv.getCompletedQuestsCount(player) >= badge.getRequirement()) {
+                        try {
+                            badgeSrv.addBadgeToUser(player, badge);
+                            PopupMessage.showInformationMessage("You earned a badge: " + badge.getTitle());
+                        } catch (RepositoryException e) {
+                            PopupMessage.showErrorMessage(e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
     }
 }

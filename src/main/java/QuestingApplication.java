@@ -5,8 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import repository.UserRepository;
+import repository.database.AwardedBadgeDBRepository;
+import repository.database.BadgeDBRepository;
 import repository.database.QuestDBRepository;
 import repository.database.UserDBRepository;
+import service.BadgeService;
 import service.QuestService;
 import service.UserService;
 
@@ -17,6 +20,7 @@ import java.util.Properties;
 public class QuestingApplication extends Application {
     private UserService userSrv;
     private QuestService questSrv;
+    private BadgeService badgeSrv;
 
     public static void main(String[] args) {
         launch();
@@ -35,6 +39,7 @@ public class QuestingApplication extends Application {
         UserRepository userRepo = new UserDBRepository(url);
         userSrv = new UserService(userRepo);
         questSrv = new QuestService(userRepo, new QuestDBRepository(url));
+        badgeSrv = new BadgeService(new BadgeDBRepository(url), new AwardedBadgeDBRepository(url));
 
         initView(primaryStage);
     }
@@ -51,6 +56,7 @@ public class QuestingApplication extends Application {
         LoginController loginCtr = fxmlLoader.getController();
         loginCtr.setUserSrv(userSrv);
         loginCtr.setQuestSrv(questSrv);
+        loginCtr.setBadgeSrv(badgeSrv);
 
         primaryStage.show();
     }

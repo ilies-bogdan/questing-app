@@ -6,7 +6,7 @@ public class User implements Entity<Integer> {
     private String email;
     private int passwordCode;
     private String salt;
-    private Rank rank;
+    private UserRank rank;
     private int tokenCount;
 
     public User() {
@@ -19,7 +19,7 @@ public class User implements Entity<Integer> {
         this.tokenCount = 0;
     }
 
-    public User(int id, String username, String email, int passwordCode, String salt, Rank rank, int tokenCount) {
+    public User(int id, String username, String email, int passwordCode, String salt, UserRank rank, int tokenCount) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -29,7 +29,7 @@ public class User implements Entity<Integer> {
         this.tokenCount = tokenCount;
     }
 
-    public User(String username, String email, int passwordCode, String salt, Rank rank, int tokenCount) {
+    public User(String username, String email, int passwordCode, String salt, UserRank rank, int tokenCount) {
         this.username = username;
         this.email = email;
         this.passwordCode = passwordCode;
@@ -80,11 +80,11 @@ public class User implements Entity<Integer> {
         this.salt = salt;
     }
 
-    public Rank getRank() {
+    public UserRank getRank() {
         return rank;
     }
 
-    public void setRank(Rank rank) {
+    public void setRank(UserRank rank) {
         this.rank = rank;
     }
 
@@ -101,23 +101,26 @@ public class User implements Entity<Integer> {
         return username;
     }
 
+    /**
+     * Updates the user rank according to the token count
+     */
     public void updateUserRank() {
         if (tokenCount < 100) {
-            rank = Rank.Iron;
+            rank = UserRank.Iron;
         } else if (tokenCount < 200) {
-            rank = Rank.Bronze;
+            rank = UserRank.Bronze;
         } else if (tokenCount < 500) {
-            rank = Rank.Silver;
+            rank = UserRank.Silver;
         } else if (tokenCount < 1000) {
-            rank = Rank.Gold;
+            rank = UserRank.Gold;
         } else if (tokenCount < 1500) {
-            rank = Rank.Platinum;
+            rank = UserRank.Platinum;
         } else if (tokenCount < 2000) {
-            rank = Rank.Diamond;
+            rank = UserRank.Diamond;
         } else if (tokenCount < 3000) {
-            rank = Rank.Master;
+            rank = UserRank.Master;
         } else {
-            rank = Rank.Grandmaster;
+            rank = UserRank.Grandmaster;
         }
     }
 }

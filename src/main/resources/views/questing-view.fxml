@@ -124,5 +124,6 @@
             <Font name="Lucida Handwriting Italic" size="36.0" />
          </font>
       </Label>
+      <Button layoutX="370.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleViewBadges" prefHeight="26.0" prefWidth="100.0" text="My Badges" />
    </children>
 </AnchorPane>

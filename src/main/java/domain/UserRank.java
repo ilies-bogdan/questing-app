@@ -1,6 +1,6 @@
 package domain;
 
-public enum Rank {
+public enum UserRank {
     Iron,
     Bronze,
     Silver,

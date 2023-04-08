@@ -113,6 +113,13 @@
 .text-field {
     -fx-font-family: "Bell MT";
     -fx-font-size: 14px;
+    -fx-border-style: solid;
+    -fx-border-color: #00243f;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-prompt-text-fill: black;
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
 }
 
 .button {
@@ -120,7 +127,20 @@
     -fx-background-color: linear-gradient(#93efd3, #52efe2);
 }
 
+.button:hover {
+    -fx-background-color: rgb(6, 211, 82);
+}
+
 .spinner {
     -fx-background-color: transparent;
-    -fx-border-radius: 5;
+    -fx-border-radius: 10px;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button  {
+    -fx-body-color: transparent;
+}
+
+.spinner .increment-button:hover {
+    -fx-body-color: rgb(6, 211, 82);
 }

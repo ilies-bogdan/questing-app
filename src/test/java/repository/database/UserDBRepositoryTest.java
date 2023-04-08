@@ -1,7 +1,7 @@
 package repository.database;
 
 import controller.PopupMessage;
-import domain.Rank;
+import domain.UserRank;
 import domain.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -57,7 +57,7 @@ public class UserDBRepositoryTest {
 
     @Test
     public void testAddUser() {
-        User user = new User("username", "email", 1, "salt", Rank.Bronze, 100);
+        User user = new User("username", "email", 1, "salt", UserRank.Bronze, 100);
         assertDoesNotThrow(() -> userRepo.add(user));
         for (User u : userRepo.getAll()) {
             assertEquals(user.getUsername(), u.getUsername());
@@ -71,7 +71,7 @@ public class UserDBRepositoryTest {
 
     @Test
     public void testFindUserByUsernameSuccess() {
-        User user = new User("username", "email", 1, "salt", Rank.Bronze, 100);
+        User user = new User("username", "email", 1, "salt", UserRank.Bronze, 100);
         assertDoesNotThrow(() -> userRepo.add(user));
         assertDoesNotThrow(() -> userRepo.findByUsername("username"));
     }
@@ -83,23 +83,23 @@ public class UserDBRepositoryTest {
 
     @Test
     public void testUpdateUserSuccess() {
-        User user = new User("username", "email", 1, "salt", Rank.Bronze, 100);
+        User user = new User("username", "email", 1, "salt", UserRank.Bronze, 100);
         assertDoesNotThrow(() -> userRepo.add(user));
         assertDoesNotThrow(() -> userRepo.update(
-                new User("username1", "email1", 2, "salt1", Rank.Silver, 1000),
+                new User("username1", "email1", 2, "salt1", UserRank.Silver, 1000),
                 userRepo.findByUsername("username").getId()));
         assertEquals("username1", userRepo.findByUsername("username1").getUsername());
         assertEquals("email1", userRepo.findByUsername("username1").getEmail());
         assertEquals(2, userRepo.findByUsername("username1").getPasswordCode());
         assertEquals("salt1", userRepo.findByUsername("username1").getSalt());
-        assertEquals(Rank.Silver, userRepo.findByUsername("username1").getRank());
+        assertEquals(UserRank.Silver, userRepo.findByUsername("username1").getRank());
         assertEquals(1000, userRepo.findByUsername("username1").getTokenCount());
     }
 
     @Test
     public void testUpdateUserFailure() {
         assertThrows(RepositoryException.class, () -> userRepo.update(
-                new User("username1", "email1", 2, "salt1", Rank.Silver, 1000),
+                new User("username1", "email1", 2, "salt1", UserRank.Silver, 1000),
                 1));
     }
 }
