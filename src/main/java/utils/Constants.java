@@ -15,7 +15,7 @@ public class Constants {
 
     public static final int MAX_GUESS_COUNT = 6;
 
-    public static final String ALPHA_NUMERIC_STRINGS = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
+    public static final String ALPHA_NUMERIC_STRING = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 }

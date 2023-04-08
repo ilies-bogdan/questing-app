@@ -32,7 +32,7 @@ public interface Repository<E extends Entity<Id>, Id> {
 
     /**
      * Gets all the entities in the repository.
-     * @return iterable object containing all the entities.
+     * @return iterable object containing all the entities
      */
     Iterable<E> getAll();
 }

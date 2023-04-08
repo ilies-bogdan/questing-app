@@ -7,7 +7,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import repository.RepositoryException;
-import service.QuestService;
 import service.ServiceException;
 import service.UserService;
 
@@ -29,6 +28,9 @@ public class SignupController {
         this.loginStage = loginStage;
     }
 
+    /**
+     * Handles account creation by validating the data and creating a new account.
+     */
     public void handleAccountCreation(ActionEvent event) {
         String username = textFieldUsername.getText();
         String email = textFieldEmail.getText();

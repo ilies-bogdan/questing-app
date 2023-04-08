@@ -7,19 +7,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import repository.AwardedBadgeRepository;
 import repository.RepositoryException;
 import service.BadgeService;
 import service.QuestService;
 import service.UserService;
 import utils.Constants;
 
-import java.util.List;
 import java.util.Optional;
 
 public class GameController {
@@ -65,6 +63,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Handles close request by warning the user of the consequences.
+     */
     private void handleCloseRequest() {
         if (quest.getStatus() != QuestStatus.accepted) {
             return;
@@ -81,6 +82,9 @@ public class GameController {
         ((Stage) gridPane.getScene().getWindow()).close();
     }
 
+    /**
+     * Handles each guess of the player, validates it, and checks for win/lose conditions.
+     */
     public void handleGuess(ActionEvent event) {
         String guess = textFieldGuess.getText();
         textFieldGuess.clear();
@@ -114,6 +118,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Handles the completion of a quest, by awarding the player.
+     */
     private void handleCompleteQuest() {
         try {
             quest.setStatus(QuestStatus.completed);
@@ -133,6 +140,9 @@ public class GameController {
         awardBadges();
     }
 
+    /**
+     * Handles the failure of a quest by informing the player and giving the tokens back to the quest giver.
+     */
     private void handleFailQuest() {
         try {
             quest.setStatus(QuestStatus.failed);
@@ -151,6 +161,9 @@ public class GameController {
         PopupMessage.showInformationMessage("Quest Failed!");
     }
 
+    /**
+     * Awards badges to the player according to how many quests the user completed.
+     */
     private void awardBadges() {
         User player = userSrv.findUserById(quest.getPlayerId());
         for (Badge badge : badgeSrv.getAllBadges()) {

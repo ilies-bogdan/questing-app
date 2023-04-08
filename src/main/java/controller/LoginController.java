@@ -38,6 +38,9 @@ public class LoginController {
         this.badgeSrv = badgeSrv;
     }
 
+    /**
+     * Handles the sign-up request by opning the sign-up window.
+     */
     public void handleSignUpRequest(MouseEvent mouseEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/signup-view.fxml"));
         Stage stage = new Stage();
@@ -57,6 +60,9 @@ public class LoginController {
         stage.show();
     }
 
+    /**
+     * Handles the login request by either granting access or revoking it based on credentials.
+     */
     public void handleLoginRequest(ActionEvent event) throws IOException {
         String username = textFieldUsername.getText();
         String password = passwordField.getText();
@@ -80,7 +86,6 @@ public class LoginController {
             questingCtr.setLoginStage(loginStage);
 
             passwordField.clear();
-            // loginStage.hide();
             stage.show();
         } else {
             PopupMessage.showErrorMessage("Invalid login credentials!");

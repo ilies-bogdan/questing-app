@@ -92,22 +92,6 @@ public class QuestDBRepository implements QuestRepository {
 
     @Override
     public Quest findById(Integer id) {
-        logger.traceEntry("Finding by ID: {}", id);
-        Connection conn = dbUtils.getConnection();
-        try(PreparedStatement preStmt = conn.prepareStatement("SELECT * FROM Quests WHERE id=?")) {
-            preStmt.setInt(1, id);
-            try(ResultSet result = preStmt.executeQuery()) {
-                if (result.next()) {
-                    Quest quest = extractQuest(result);
-                    logger.traceExit("Found: {}", quest);
-                    return quest;
-                }
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            PopupMessage.showErrorMessage("DB error " + e);
-        }
-        logger.traceExit("Found: {}", null);
         return null;
     }
 

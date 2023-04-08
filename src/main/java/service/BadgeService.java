@@ -40,12 +40,16 @@ public class BadgeService implements Service {
         }
     }
 
+    /**
+     * Gets all the existing badges.
+     * @return iterable object containing all the badges
+     */
     public Iterable<Badge> getAllBadges() {
         return badgeRepo.getAll();
     }
 
     /**
-     * Gets all badges for a user
+     * Gets all badges for a user.
      * @param user - the user whose badges are being looked for
      * @return iterable object containing badges
      */
@@ -57,7 +61,7 @@ public class BadgeService implements Service {
     }
 
     /**
-     * Checks if a user has a badge
+     * Checks if a user has a badge.
      * @param user - the user being checked
      * @param badge - the badge being checked
      * @return true if the user has the badge
@@ -67,6 +71,12 @@ public class BadgeService implements Service {
         return awardedBadgeRepo.findByUserAndBadge(user.getId(), badge.getId()) != null;
     }
 
+    /**
+     * Adds a new badge to a user.
+     * @param user - the user being awarded
+     * @param badge - the badge that is awarded
+     * @throws RepositoryException if the add operation fails
+     */
     public void addBadgeToUser(User user, Badge badge) throws RepositoryException {
         awardedBadgeRepo.add(new AwardedBadge(user.getId(), badge.getId(), LocalDateTime.now()));
         notifyAllObservers();

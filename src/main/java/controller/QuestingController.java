@@ -34,7 +34,6 @@ public class QuestingController implements Observer {
     private QuestService questSrv;
     private BadgeService badgeSrv;
     private User user;
-    private Stage loginStage;
     private ObservableList<Quest> modelMyQuests = FXCollections.observableArrayList();
     private ObservableList<Quest> modelAvailableQuests = FXCollections.observableArrayList();
     private ObservableList<Quest> modelQuestJournal = FXCollections.observableArrayList();
@@ -95,10 +94,6 @@ public class QuestingController implements Observer {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void setLoginStage(Stage loginStage) {
-        this.loginStage = loginStage;
         initModel();
     }
 
@@ -150,6 +145,9 @@ public class QuestingController implements Observer {
         tableViewMyQuests.setItems(modelMyQuests);
     }
 
+    /**
+     * Handles search by filtering the view to only include the requested quests.
+     */
     private void handleSearch() {
         Predicate<Quest> byPlayer = quest ->
             userSrv.findUserById(quest.getGiverId())
@@ -160,6 +158,9 @@ public class QuestingController implements Observer {
                 .collect(Collectors.toList()));
     }
 
+    /**
+     * Handles posting of new quests by validating them and adding them to the tables accordingly.
+     */
     public void handlePostNewQuest(ActionEvent event) {
         String word = textFieldWord.getText();
         int reward = 0;
@@ -184,6 +185,9 @@ public class QuestingController implements Observer {
         }
     }
 
+    /**
+     * Handles accepting quests by updating the corresponding data.
+     */
     public void handleAcceptQuest(ActionEvent event) {
         if (tableViewAvailableQuests.getSelectionModel().isEmpty()) {
             PopupMessage.showErrorMessage("No quest selected!");
@@ -208,6 +212,9 @@ public class QuestingController implements Observer {
         }
     }
 
+    /**
+     * Handles starting quests by loading the game window.
+     */
     public void handleStartQuest(ActionEvent event) throws IOException {
         if (tableViewQuestJournal.getSelectionModel().isEmpty()) {
             PopupMessage.showErrorMessage("No quest selected!");
@@ -245,6 +252,9 @@ public class QuestingController implements Observer {
         stage.show();
     }
 
+    /**
+     * Handles viewing of badges by loading the badges window.
+     */
     public void handleViewBadges(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/badge-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 540);
@@ -262,6 +272,9 @@ public class QuestingController implements Observer {
         stage.show();
     }
 
+    /**
+     * Awards badges to the player according to how many quests the user posted.
+     */
     private void awardBadges() {
         for (Badge badge : badgeSrv.getAllBadges()) {
             if (!badgeSrv.userHasBadge(user, badge)) {

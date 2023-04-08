@@ -16,7 +16,7 @@ public class UserValidator implements AbstractUserValidator {
             errorMessage += "Username must be at least " + Constants.MINIMUM_USERNAME_LENGTH + " characters long!\n";
         } else {
             for (int i = 0; i < username.length(); i++) {
-                if (!Constants.ALPHA_NUMERIC_STRINGS.contains(String.valueOf(username.charAt(i)))) {
+                if (!Constants.ALPHA_NUMERIC_STRING.contains(String.valueOf(username.charAt(i)))) {
                     errorMessage += "Username must only contain alphanumeric characters!\n";
                     break;
                 }
@@ -48,11 +48,6 @@ public class UserValidator implements AbstractUserValidator {
         }
     }
 
-    /**
-     * Validates a password
-     * @param password - the password to be validated
-     * @throws ValidationException if the password is too short
-     */
     public void validatePassword(String password) throws ValidationException {
         String message = "";
         if (password == null || password.trim().length() < Constants.MINIMUM_PASSWORD_LENGTH) {

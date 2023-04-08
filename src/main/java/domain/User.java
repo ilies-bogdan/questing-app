@@ -102,7 +102,7 @@ public class User implements Entity<Integer> {
     }
 
     /**
-     * Updates the user rank according to the token count
+     * Updates the user rank according to the token count.
      */
     public void updateUserRank() {
         if (tokenCount < 100) {

@@ -1,17 +1,14 @@
 package utils;
 
 import controller.PopupMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class JdbcUtils {
-    // private final Properties jdbcProps;
     private static final Logger logger = LogManager.getLogger();
     private final String url;
     private Connection connection = null;
@@ -20,6 +17,10 @@ public class JdbcUtils {
         this.url = url;
     }
 
+    /**
+     * Connects to the database.
+     * @return the new connection to the database
+     */
     private Connection getNewConnection() {
         logger.traceEntry();
         Connection conn = null;
@@ -34,6 +35,10 @@ public class JdbcUtils {
         return conn;
     }
 
+    /**
+     * Gets the connection to the database or creates it first if it doesn't exist.
+     * @return the connection to the database
+     */
     public Connection getConnection() {
         logger.traceEntry();
         try {
