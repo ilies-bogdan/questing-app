@@ -42,12 +42,12 @@ public class BadgeController implements Observer {
     }
 
     private void initModel() {
-        tableViewBadges.setPlaceholder(new Label("No badges earned"));
         modelBadges.setAll((Collection<Badge>) badgeSrv.getAllBadgesForUser(user));
     }
 
     @FXML
     public void initialize() {
+        tableViewBadges.setPlaceholder(new Label("No badges earned"));
         tableColumnBadgesTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         tableColumnBadgesDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         tableViewBadges.setItems(modelBadges);

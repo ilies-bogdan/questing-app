@@ -104,10 +104,6 @@ public class QuestingController implements Observer {
 
     private void initModel() {
         user = userSrv.findUserById(user.getId());
-        tableViewQuestJournal.setPlaceholder(new Label("Journal is empty"));
-        tableViewAvailableQuests.setPlaceholder(new Label("No quests available"));
-        tableViewMyQuests.setPlaceholder(new Label("You have posted no quests"));
-        spinnerReward.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000));
         labelRankTokens.setText("Your rank: " + user.getRank() + " | You have " + user.getTokenCount() + " tokens.");
         modelQuestJournal.setAll((Collection<Quest>) questSrv.getQuestJournal(user));
         modelAvailableQuests.setAll((Collection<Quest>) questSrv.getAvailableQuests(user));
@@ -116,6 +112,11 @@ public class QuestingController implements Observer {
 
     @FXML
     public void initialize() {
+        tableViewQuestJournal.setPlaceholder(new Label("Journal is empty"));
+        tableViewAvailableQuests.setPlaceholder(new Label("No quests available"));
+        tableViewMyQuests.setPlaceholder(new Label("You have posted no quests"));
+        spinnerReward.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000));
+
         tableColumnQuestJournalQuestGiver.setCellValueFactory(param ->
                 new ReadOnlyObjectWrapper<>(userSrv.findUserById(param.getValue().getGiverId()).getUsername()));
         tableColumnQuestJournalGiverRank.setCellValueFactory(param ->

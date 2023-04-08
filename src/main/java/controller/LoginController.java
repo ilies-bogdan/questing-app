@@ -82,8 +82,6 @@ public class LoginController {
             questingCtr.setQuestSrv(questSrv);
             questingCtr.setBadgeSrv(badgeSrv);
             questingCtr.setUser(userSrv.findUserByUsername(username));
-            Stage loginStage  = (Stage) textFieldUsername.getScene().getWindow();
-            questingCtr.setLoginStage(loginStage);
 
             passwordField.clear();
             stage.show();

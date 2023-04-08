@@ -57,7 +57,7 @@
                               <Font name="Bell MT" size="14.0" />
                            </font>
                         </TextArea>
-                        <TextField fx:id="textFieldSearchPlayer" layoutX="14.0" layoutY="24.0" promptText="Search for a player" />
+                        <TextField fx:id="textFieldSearchPlayer" layoutX="14.0" layoutY="24.0" promptText="Search for a player..." />
                         <Button layoutX="624.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleAcceptQuest" prefHeight="26.0" prefWidth="115.0" text="Accept Quest">
                            <font>
                               <Font name="Bell MT" size="16.0" />
@@ -125,5 +125,6 @@
          </font>
       </Label>
       <Button layoutX="370.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleViewBadges" prefHeight="26.0" prefWidth="100.0" text="My Badges" />
+      <TextArea fx:id="textAreaDescription" editable="false" layoutX="26.0" layoutY="131.0" prefHeight="363.0" prefWidth="285.0" text="Navigate the tabs at the top to see quests. Accept them, find new ones and even post your own!&#10;&#10;Solve quests to earn tokens and badges and to advance your rank!" wrapText="true" />
    </children>
 </AnchorPane>
