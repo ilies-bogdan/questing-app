@@ -4,6 +4,7 @@ import domain.*;
 import domain.validation.ValidationException;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -12,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import repository.RepositoryException;
 import service.BadgeService;
 import service.QuestService;
@@ -52,7 +54,7 @@ public class GameController {
 
     private void initModel() {
         Stage stage  = (Stage) gridPane.getScene().getWindow();
-        stage.setOnCloseRequest(event -> handleCloseRequest());
+        stage.setOnCloseRequest(this::handleCloseRequest);
         for (int i = 0; i < Constants.MAX_GUESS_COUNT; i++) {
             for (int j = 0; j < Constants.WORD_SIZE; j++) {
                 TextField textField = new TextField();
@@ -66,7 +68,7 @@ public class GameController {
     /**
      * Handles close request by warning the user of the consequences.
      */
-    private void handleCloseRequest() {
+    private void handleCloseRequest(WindowEvent event) {
         if (quest.getStatus() != QuestStatus.accepted) {
             return;
         }
@@ -76,6 +78,7 @@ public class GameController {
         alert.setContentText("If you quit now, you will fail the quest.");
         Optional<ButtonType> option =  alert.showAndWait();
         if (option.isEmpty() || option.get() == ButtonType.CANCEL) {
+            event.consume();
             return;
         }
         handleFailQuest();
