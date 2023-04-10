@@ -83,6 +83,7 @@ public class LoginController {
             questingCtr.setBadgeSrv(badgeSrv);
             questingCtr.setUser(userSrv.findUserByUsername(username));
 
+            textFieldUsername.clear();
             passwordField.clear();
             stage.show();
         } else {

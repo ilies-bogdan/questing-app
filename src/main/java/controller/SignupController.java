@@ -45,4 +45,13 @@ public class SignupController {
             PopupMessage.showErrorMessage(e.getMessage());
         }
     }
+
+    /**
+     * Handles going back to the login window.
+     */
+    public void handleGoBack(ActionEvent event) {
+        Stage signupStage  = (Stage) textFieldUsername.getScene().getWindow();
+        signupStage.close();
+        loginStage.show();
+    }
 }

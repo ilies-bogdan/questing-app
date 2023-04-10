@@ -31,7 +31,7 @@
                               <TableColumn fx:id="tableColumnQuestJournalStatus" maxWidth="120.0" minWidth="-1.0" prefWidth="120.0" text="Status" />
                           </columns>
                         </TableView>
-                        <TextArea editable="false" layoutX="631.0" layoutY="39.0" prefHeight="356.0" prefWidth="200.0" text="View your quest journal.&#10;&#10;Here you can see all quests that you have accepted and the ones that you have completed, even if you failed them.&#10;&#10;To attempt a quest, select any one from the table, then, once ready, click the button below.&#10;&#10;You will have 6 tries to try and guess the 5-letter word. Each try will give you feedback on how close you are to guessing the word.&#10;&#10;Good luck!" wrapText="true" />
+                        <TextArea editable="false" layoutX="631.0" layoutY="39.0" prefHeight="356.0" prefWidth="200.0" text="View your quest journal.&#10;&#10;Here you can see all the quests that you have accepted, including the ones that you have attempted, even if you failed them.&#10;&#10;To attempt a quest, select any one from the table, then, once ready, click the button below.&#10;&#10;You will have 6 tries to try and guess the 5-letter word. Each try will give you feedback on how close you are to guessing the word.&#10;&#10;Good luck!" wrapText="true" />
                         <Button layoutX="673.0" layoutY="421.0" mnemonicParsing="false" onAction="#handleStartQuest" prefHeight="26.0" prefWidth="115.0" text="Start Quest">
                            <font>
                               <Font name="Bell MT" size="16.0" />
@@ -52,7 +52,7 @@
                               <TableColumn fx:id="tableColumnAvailableQuestsReward" prefWidth="109.60001220703123" text="Reward" />
                           </columns>
                         </TableView>
-                        <TextArea editable="false" layoutX="554.0" layoutY="82.0" prefHeight="316.0" prefWidth="256.0" text="Here you can see all available quests. &#10;&#10;You can use the search bar in the upper left corner to find the quests that a certain player has posted.&#10;&#10;Once you find a quest with a suitable reward for you, select it and click the button below to accept it.&#10;&#10;Once accepted, the quest will go to your Quest Journal from where you can solve it anytime you like." wrapText="true">
+                        <TextArea editable="false" layoutX="554.0" layoutY="82.0" prefHeight="316.0" prefWidth="256.0" text="Here you can see all the available quests. &#10;&#10;You can use the search bar in the upper left corner to find quests that a certain player has posted.&#10;&#10;Once you find a quest with a suitable reward for you, select it and click the button below to accept it.&#10;&#10;Once accepted, the quest will go to your Quest Journal from where you can solve it anytime you like." wrapText="true">
                            <font>
                               <Font name="Bell MT" size="14.0" />
                            </font>
@@ -79,7 +79,7 @@
                               <TableColumn fx:id="tableColumnMyQuestsStatus" prefWidth="100.79998779296875" text="Status" />
                           </columns>
                         </TableView>
-                        <TextArea editable="false" layoutX="632.0" layoutY="57.0" prefHeight="378.0" prefWidth="200.0" text="View quests that you posted.&#10;&#10;Here you can see the word associated with your quest, the date you posted the quest at, the reward and its current status.&#10;&#10;When you post a new quest, its status will always be 'posted'. Once someone accepts it, its status becomes 'accepted' and finally, once completed, it becomes either 'completed' or 'failed'.&#10;&#10;If the quest is failed by the player who took it, your reward tokens get sent back to you.&#10;&#10;" wrapText="true">
+                        <TextArea editable="false" layoutX="632.0" layoutY="57.0" prefHeight="378.0" prefWidth="200.0" text="View quests that you posted.&#10;&#10;Here you can see the quests you have posted, alongside the word associated with each quest, the date you posted the quest at, the reward and its current status.&#10;&#10;When you post a new quest, its status will be &quot;posted&quot;. Once someone accepts it, its status becomes &quot;accepted&quot; and finally, once over, it becomes either &quot;completed&quot; or &quot;failed&quot;.&#10;&#10;If the quest is failed by the player who took it, your reward tokens get sent back to you.&#10;&#10;" wrapText="true">
                            <font>
                               <Font name="Bell MT" size="14.0" />
                            </font>
