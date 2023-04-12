@@ -5,4 +5,4 @@ The application implements a token reward system, as well as badges and ranks wi
 
 Quests consist of word puzzles, where the player has to guess a hidden word within a given number of tries.
 
-The application muse be run with Gradle in order for it to work: in the Gradle menu of IntelliJ Tasks/application/run
+The application must be run with Gradle in order for it to work: in the Gradle menu of IntelliJ Tasks/application/run
